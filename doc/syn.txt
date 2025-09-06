@@ -1,0 +1,172 @@
+NEOPOP(1)                  User Commands                 NEOPOP(1)
+
+NAME
+       neopop - lean Cypher graph populator (wrapper around
+       cypher-shell)
+
+SYNOPSIS
+       neopop [OPTION]... (-u USER -p PASS -a URL -d DB) <command>
+
+       Commands:
+         monolithic [--echo-cys]
+                    [--fail-fast | --best-effort]
+                    [--clean-db | --reset-db]
+                    --seed FILE [--stm-wise]
+
+         modular    [--echo-cys]
+                    [--fail-fast | --best-effort]
+                    [--clean-db | --reset-db]
+                    --seed-dml FILE [--stm-wise | --pkg-wise --pkg-size N]
+                    [--seed-pre FILE] [--seed-post FILE]
+
+         db-check
+         db-clean
+         db-reset
+
+DESCRIPTION
+       neopop executes Cypher workloads against a Neo4j 5 database.
+       It wraps cypher-shell to provide consistent commit models,
+       execution control, and initialization patterns.
+
+       Two graph seed kinds are supported:
+
+       Monolithic:
+              A single Cypher file (DDL and/or DML) executed
+              statement-wise. Equivalent to feeding the file
+              directly into cypher-shell.
+
+       Modular:
+              A triple of optional pre/post schema files (DDL)
+              and a mandatory pure DML file. Supports both
+              statement-wise and package-wise commit models.
+
+OPTIONS
+       -u, --user=USER
+              Database username.
+
+       -p, --password=PASS
+              Database password.
+
+       -a, --address=URL
+              Bolt URL of the server (e.g. neo4j://localhost:7687).
+
+       -d, --database=DB
+              Target database name.
+
+       --echo-cys
+              Echo cypher-shell output during seeding. Useful for
+              debugging or verifying Cypher execution. By default,
+              output is only written to the log file (neopop.log).
+
+Execution control (mutually exclusive):
+       --fail-fast
+              Abort on first error (default if unspecified).
+
+       --best-effort
+              Execute all, report errors at end.
+
+Database preparation (mutually exclusive):
+       --clean-db
+              Remove all nodes, relationships, constraints,
+              and indexes before seeding.
+
+       --reset-db
+              Drop and recreate the target database before
+              seeding. Requires system database access.
+
+MONOLITHIC COMMAND
+       --seed FILE
+              Input file containing DDL and/or DML statements.
+              FILE may be "-" for STDIN.
+
+       --stm-wise
+              Statement-wise commit model (default if omitted).
+              Each statement runs in its own implicit transaction.
+
+MODULAR COMMAND
+       --seed-dml FILE
+              Pure DML seed file (mandatory).
+              FILE may be "-" for STDIN.
+
+       --stm-wise
+              Statement-wise commit model (default if omitted).
+              Each statement runs in its own implicit transaction.
+
+       --pkg-wise
+              Package-wise commit model. Statements from
+              --seed-dml FILE are grouped into explicit
+              transaction blocks of size N.
+          --pkg-size N
+              Number of DML statements per transaction.
+              N ≥ 2 (N=1 not allowed).
+
+       --seed-pre FILE
+              Executed once before --seed-dml in a single tx.
+              FILE must contain only DDL statements.
+
+       --seed-post FILE
+              Executed once after --seed-dml in a single tx.
+              FILE must contain only DDL statements.
+
+DATABASE COMMANDS
+       db-check
+              Verifies connectivity to the target database by
+              running a trivial Cypher query (RETURN 1).
+
+       db-clean
+              Removes all data and schema objects from the target
+              database by:
+                • Batch-deleting all nodes and relationships
+                • Dropping all constraints
+                • Dropping all indexes
+
+       db-reset
+              Drops and recreates the target database, then
+              waits until it is online again.
+              Requires access to the system database!
+              ⚠️  All data will be permanently lost.
+
+EXAMPLES
+       Monolithic seed from file:
+              neopop -u neo4j -p secret -a neo4j://localhost:7687 -d test \
+                  monolithic --seed mixed.cypher
+
+       Monolithic seed from stdin:
+              cat mixed.cypher | neopop -u neo4j -p secret -a ... -d test \
+                  monolithic --seed -
+
+       Modular seed (statement-wise):
+              neopop -u neo4j -p secret -a ... -d test \
+                  modular --seed-dml graph.cypher --stm-wise
+
+       Modular seed (package-wise, 500 stmts per tx):
+              neopop -u neo4j -p secret -a ... -d test \
+                  modular --seed-dml graph.cypher \
+                          --pkg-wise --pkg-size 500
+
+       Modular seed with schema setup/teardown:
+              neopop -u neo4j -p secret -a ... -d test \
+                  modular --seed-pre pre.cypher \
+                          --seed-dml graph.cypher \
+                          --seed-post post.cypher \
+                          --pkg-wise --pkg-size 1000
+
+       Reset database before running workload:
+              neopop -u neo4j -p secret -a ... -d test \
+                  db-reset
+
+AUTHOR
+       Written by nemron.
+
+COPYRIGHT
+       GNU GENERAL PUBLIC LICENSE
+       Version 3, 29 June 2007.
+
+SEE ALSO
+       cypher-shell(1),
+       Neo4j Cypher Manual:
+         https://neo4j.com/docs/cypher-manual/current/
+       Neo4j Operations Manual:
+         https://neo4j.com/docs/operations-manual/current/
+
+Neopop 0.1.0               September 2025              NEOPOP(1)
