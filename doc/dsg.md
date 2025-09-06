@@ -88,31 +88,31 @@ cf. [Using](../src/neopop/usg/modular.txt) Neopop `modular` command.
 
 ## Exkursion: Realization of commit models
 
-> [!addendum] Statement-wise commit model realization
->
-> ````plaintext
-> cypher-shell --fail-fast|--fail-at-end -f FILE
-> ````
+**Statement-wise commit model realization**
 
-> [!addendum] Package-wise commit model realization
->
-> In pseudo code:
->
-> ````plaintext
-> cypher-shell --fail-fast|--fail-at-end -f <ddl-pre.cypher>
->
-> chks = create_chunks N FILE
-> for f in chks; do
->   { printf ':begin\n'; cat "$f"; printf '\n:commit\n'; } \
->   | cypher-shell --fail-fast|--fail-at-end || {
->     echo "❌ failed on $f"
->     exit 1
->   }
->
-> cypher-shell --fail-fast|--fail-at-end -f <ddl-post.cypher>
-> ````
->
-> ⚠️  In case of `--fail-at-end` loop runs to the end.
+````plaintext
+cypher-shell --fail-fast|--fail-at-end -f FILE
+````
+
+**Package-wise commit model realization**
+
+In pseudo code:
+
+````plaintext
+cypher-shell --fail-fast|--fail-at-end -f <ddl-pre.cypher>
+
+chks = create_chunks N FILE
+for f in chks; do
+  { printf ':begin\n'; cat "$f"; printf '\n:commit\n'; } \
+  | cypher-shell --fail-fast|--fail-at-end || {
+    echo "❌ failed on $f"
+    exit 1
+  }
+
+cypher-shell --fail-fast|--fail-at-end -f <ddl-post.cypher>
+````
+
+⚠️  In case of `--fail-at-end` loop runs to the end.
 
 ## DB Preparations
 
