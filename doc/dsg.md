@@ -72,19 +72,19 @@ A **graph population** is an operational process of executing a graph seed into 
 
 ## Synopsis
 
-cf. [Usage](../src/neopop/lib/usg/neopop.txt)
+cf. [Usage](../src/neopop/usg/neopop.txt)
 
 ## Populations
 
 ### Seeding: monolithic
 
-cf. [Using](../src/neopop/lib/usg/monolithic.txt) Neopop `monolithic` command.
+cf. [Using](../src/neopop/usg/monolithic.txt) Neopop `monolithic` command.
 
 ⚠️  Monolithic graph seeds can only be populated with statement-wise commit model. This is due to the fact that, as to Neo4j, DDL Statements must not be warpped in `:begin ... :commit`! A graph declaration, however, might be populated statement-wise or packaged-wise.
 
 ### Seeding: modular
 
-cf. [Using](../src/neopop/lib/usg/modular.txt) Neopop `modular` command.
+cf. [Using](../src/neopop/usg/modular.txt) Neopop `modular` command.
 
 ## Exkursion: Realization of commit models
 
@@ -118,15 +118,15 @@ cf. [Using](../src/neopop/lib/usg/modular.txt) Neopop `modular` command.
 
 ### Checking: db-check
 
-cf. [Using](../src/usg/check-db.txt) Neopop `check-db` command.
+cf. [Using](../src/neopop/usg/db-check.txt) Neopop `db-check` command.
 
 ### Cleaning: db-clean
 
-cf. [Using](../src/usg/clean-db.txt) Neopop `clean-db` command.
+cf. [Using](../src/neopop/usg/db-clean.txt) Neopop `db-clean` command.
 
 ### Resetting: db-reset
 
-cf. [Using](../src/usg/clean-db.txt) Neopop `reset-db` command.
+cf. [Using](../src/neopop/usg/db-clean.txt) Neopop `db-reset` command.
 
 # Outlook
 
@@ -135,18 +135,18 @@ cf. [Using](../src/usg/clean-db.txt) Neopop `reset-db` command.
 ### Check DB
 
 ````plaintext
-neopop -u usr -p pass -a url -d db check-db
+neopop -u usr -p pass -a url -d db db-check
   -> ( exec .neopop/check-db.sh
-     | neopop -u usr -p pass -a url -d db seed -f .neopop/check-db.cypher
+     | neopop -u usr -p pass -a url -d db monolithic --seed .neopop/check-db.cypher
      )
 ````
 
 ### Clean DB
 
 ````plaintext
-neopop -u usr -p pass -a url -d db clean-db
+neopop -u usr -p pass -a url -d db db-clean
   -> ( exec .neopop/clean-db.sh
-     | neopop -u usr -p pass -a url -d db seed -f .neopop/clean-db.cypher
+     | neopop -u usr -p pass -a url -d db monolithic --seed .neopop/clean-db.cypher
      )
 ````
 
@@ -155,9 +155,9 @@ Delete all nodes/relationships, drop constraints, and drop indexes.
 ### Reset DB
 
 ````plaintext
-neopop -u usr -p pass -a url -d db reset-db
+neopop -u usr -p pass -a url -d db db-reset
   -> ( exec .neopop/reset-db.sh
-     | neopop -u usr -p pass -a url -d db seed -f .neopop/reset-db.cypher
+     | neopop -u usr -p pass -a url -d db monolithic --seed .neopop/reset-db.cypher
      )
 ````
 
