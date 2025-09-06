@@ -159,8 +159,8 @@ AUTHOR
        Written by nemron.
 
 COPYRIGHT
-       GNU GENERAL PUBLIC LICENSE
-       Version 3, 29 June 2007.
+       © 2025 nemron <https://github.com/normenmueller>
+       GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007.
 
 SEE ALSO
        cypher-shell(1),
