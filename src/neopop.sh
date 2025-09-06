@@ -345,7 +345,7 @@ pkgtx() { # {{{2
   done <<<"$chunk_list"
 
   if (( ${#chunks[@]} == 0 )); then
-    log "ℹ️ pkgtx: nothing to execute (no statements found)"
+    log "ℹ️  pkgtx: nothing to execute (no statements found)"
     rmtmp
     return $EXIT_SUCCESS
   fi
@@ -489,7 +489,7 @@ dbrst() { # {{{2
       | tr -d '\"[:space:]')"
 
     [[ "$status" == "online" ]] && {
-      log "ℹ️ Database '$target_db' is back online"
+      log "ℹ️  Database '$target_db' is back online"
       return $EXIT_SUCCESS
     }
 
