@@ -29,13 +29,21 @@ It provides **consistent commit models**, **execution control**, and **database 
 **Other**:
 - `--echo-cys` echo cypher-shell output during seeding
 
+*(also cf. [Design](doc/dsg.txt).)*
+
 ## Usage
 
 ```bash
 neopop --help
 ```
 
-*(see [Synopsis](doc/syn.txt).)*
+or
+
+```bash
+man neopop
+````
+
+*(also cf. [Synopsis](doc/syn.txt).)*
 
 ### Monolithic
 
