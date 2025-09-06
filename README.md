@@ -29,7 +29,7 @@ It provides **consistent commit models**, **execution control**, and **database 
 **Other**:
 - `--echo-cys` echo cypher-shell output during seeding
 
-*(also cf. [Design](doc/dsg.txt).)*
+*(also cf. [Design](doc/dsg.md).)*
 
 ## Usage
 
