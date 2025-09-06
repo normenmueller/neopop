@@ -1,6 +1,5 @@
 ---
 title: Design
-showMiniToc: true
 version: 0.1
 ---
 

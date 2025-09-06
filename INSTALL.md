@@ -1,7 +1,6 @@
 ---
 title: Installation Guide
-showMiniToc: true
-version: v0.1.0
+version: v0.1
 ---
 
 # Prerequisites

@@ -1,6 +1,5 @@
 ---
 title: Copy'n'Paste
-showMiniToc: true
 ---
 
 # "Online BATS Debugging"

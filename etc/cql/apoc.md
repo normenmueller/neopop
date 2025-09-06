@@ -1,6 +1,6 @@
 ---
 title: APOC
-...
+---
 
 # Install `apoc-extended`
 

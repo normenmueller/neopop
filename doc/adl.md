@@ -1,6 +1,5 @@
 ---
 title: Architecture Decision Log
-showMiniToc: true
 version: 0.1
 ---
 
