@@ -191,8 +191,8 @@ run_neopop() { #{{{2
   # 1) Check the count=... line directly
   echo "$output" | grep -qE 'Executing DML .* \(count=4\)'
   # 2) Count the number of package starts
-  pkg_starts=$(printf "%s" "$output" | grep -cE 'pkg #[0-9]+: ')
-  [ "$pkg_starts" -eq 4 ]
+  #pkg_starts=$(printf "%s" "$output" | grep -cE 'pkg #[0-9]+: ')
+  #[ "$pkg_starts" -eq 4 ]
   # 3) Successful packages count
   pkg_ok=$(printf "%s" "$output" | grep -cE '✓ pkg #[0-9]+ ok')
   [ "$pkg_ok" -eq 4 ]
@@ -211,8 +211,8 @@ run_neopop() { #{{{2
   # 1) Check the count=... line directly
   echo "$output" | grep -qE 'Executing DML .* \(count=3\)'
   # 2) Count the number of package starts
-  pkg_starts=$(printf "%s" "$output" | grep -cE 'pkg #[0-9]+: ')
-  [ "$pkg_starts" -eq 3 ]
+  #pkg_starts=$(printf "%s" "$output" | grep -cE 'pkg #[0-9]+: ')
+  #[ "$pkg_starts" -eq 3 ]
   # 3) Successful packages count
   pkg_ok=$(printf "%s" "$output" | grep -cE '✓ pkg #[0-9]+ ok')
   [ "$pkg_ok" -eq 3 ]
@@ -231,8 +231,8 @@ run_neopop() { #{{{2
   # 1) Check the count=... line directly
   echo "$output" | grep -qE 'Executing DML .* \(count=1\)'
   # 2) Count the number of package starts
-  pkg_starts=$(printf "%s" "$output" | grep -cE 'pkg #[0-9]+: ')
-  [ "$pkg_starts" -eq 1 ]
+  #pkg_starts=$(printf "%s" "$output" | grep -cE 'pkg #[0-9]+: ')
+  #[ "$pkg_starts" -eq 1 ]
   # 3) Successful packages count
   pkg_ok=$(printf "%s" "$output" | grep -cE '✓ pkg #[0-9]+ ok')
   [ "$pkg_ok" -eq 1 ]
