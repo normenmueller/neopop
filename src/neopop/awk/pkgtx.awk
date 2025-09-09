@@ -26,9 +26,29 @@ function open_new_chunk(){
   stmt_count = 0
 }
 
+function basename(p,  b){ b=p; sub(/^.*\//,"",b); return b }
+
+function now(   t,cmd){
+  cmd="date +\"%Y-%m-%d %H:%M:%S\""
+  if((cmd|getline t)>0){
+    close(cmd)
+    return "[" t "]"
+  }
+  return "[unknown time]"
+}
+
+function logmsg(msg){
+  # Do NOT close /dev/stderr — it would disable further logs.
+  print msg > "/dev/stderr"
+  fflush("/dev/stderr")
+}
+
 function close_current_chunk(){
   if (cf != "") {
+    # keep stdout for machine processing:
     print cf
+    disp = basename(cf)
+    logmsg(now() "     → pkg #" chunk_idx ": " disp)
     close(cf)
     cf = ""
   }

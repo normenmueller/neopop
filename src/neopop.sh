@@ -181,7 +181,7 @@ rmtmp() { # {{{2
   local d="${CHUNKDIR:-}"
   if [[ -n "$d" && -d "$d" && "$(basename "$d")" == neopop-chunks-* ]]; then
     rm -rf -- "$d"
-    log "🧹 Removed chunk dir: $d"
+    log "  🧹 Removed chunk dir: $d"
   fi
   CHUNKDIR=""
 }
@@ -190,7 +190,7 @@ dbprep() { # {{{2
   # Uses globals: DBP_CLN, DBP_RST. Returns rc, never exits.
   local rc
   if $DBP_RST; then
-    log "🔄 --reset-db requested…"
+    log "🔄 Database reset requested…"
     if dbrst; then
       log "✅ Database reset completed"
       return 0
@@ -200,7 +200,7 @@ dbprep() { # {{{2
       return $rc
     fi
   elif $DBP_CLN; then
-    log "🧹 --clean-db requested…"
+    log "🧹 Database cleaning requested…"
     if dbcln; then
       log "✅ Database cleaning completed"
       return 0
@@ -325,6 +325,7 @@ pkgtx() { # {{{2
   CHUNKDIR="$tmpdir"  # to support rmtmp helper (cleanup + debug)
   # Chunking {{{3
   # Create chunks {{{4
+  log "  📦 Separating DML in packages of N=$pkg_n …"
   local chunk_list
   local -a awk_args=(-v tmpdir="$tmpdir" -v max_stmt="$pkg_n" -f "$awk_file")
   if [[ "$mode" == "stdin" ]]; then
@@ -588,6 +589,7 @@ popmod() { # {{{2
       log "❌ PRE failed (rc=$rc)"
       return $rc
     fi
+    log "✅ Modular seeding DB pre-processing completed"
   fi
   # GRP (DML) — stm or pkg {{{3
   # stm-wise {{{4
@@ -602,6 +604,7 @@ popmod() { # {{{2
       log "❌ GRP (stm-wise) failed (rc=$rc)"
       return $rc
     fi
+    log "✅ Modular seeding GRP (stm-wise) completed"
   # pkg-wise {{{4
   else
     if [[ "$grp" == "-" ]]; then
@@ -614,6 +617,7 @@ popmod() { # {{{2
       log "❌ GRP (pkg-wise) failed (rc=$rc)"
       return $rc
     fi
+    log "✅ Modular seeding GRP (pkg-wise) completed"
   fi
   # PST (DDL) — statement-wise {{{3
   if [[ -n "$pst" ]]; then
@@ -623,6 +627,7 @@ popmod() { # {{{2
       log "❌ PST failed (rc=$rc)"
       return $rc
     fi
+    log "✅ Modular seeding DB post-processing completed"
   fi
   # }}}3
 
