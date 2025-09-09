@@ -1,0 +1,18 @@
+🌱 Help: db-reset
+
+Usage:
+  db-reset
+
+Description:
+  Drop and recreate the target database via 'system', then wait
+  until it is online. This fully resets data, schema and token registry.
+
+Options:
+  -h, --help     Show this help text and exit
+
+Notes:
+  • Uses the provided global options (-u/-p/-a/-d)
+  • Clears all data, constraints, indexes and token registry
+    (labels, relationship types, property keys)
+  • Exits with a non-zero code if any step fails or times out
+

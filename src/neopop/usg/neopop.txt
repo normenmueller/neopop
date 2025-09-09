@@ -1,0 +1,31 @@
+🌱 neopop v$VERSION, © 2025 nemron
+
+Usage:
+  neopop -u USER -p PASS -a URL -d DB <command> [args]
+
+⚠️  Global options (-u/-p/-a/-d) must come **before** the command.
+
+Global Options:
+  -u|--user     <user>  Neo4j username (required)
+  -p|--password <pass>  Neo4j password (required)
+  -a|--address  <addr>  Bolt/Neo4j URI e.g. neo4j://localhost:7687 (required)
+  -d|--database <db>    Neo4j database (required)
+
+Commands:
+  monolithic
+    Seed a graph from a single Cypher file (DDL and/or DML)
+
+  modular
+    Seed a graph from a modular triple (pre, DML, post)
+
+  db-check
+    Test connectivity to a Neo4j database
+
+  db-clean
+    Remove all data, constraints, and indexes from a Neo4j database
+
+  db-reset
+    Drop and recreate a Neo4j database (requires system access!)
+
+ℹ️  Run 'neopop <command> --help' for details on <command>.
+

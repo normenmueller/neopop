@@ -1,0 +1,169 @@
+.TH NEOPOP 1 "September 2025" "Neopop 0.1.0" "User Commands"
+.SH NAME
+neopop \- lean Cypher graph populator (wrapper around cypher\-shell)
+.SH SYNOPSIS
+.B neopop
+[\fIOPTION\fR]... (\-u \fIUSER\fR \-p \fIPASS\fR \-a \fIURL\fR \-d \fIDB\fR) \fICOMMAND\fR [\fIARGS\fR]
+.PP
+Commands:
+.RS
+.TP
+.B monolithic
+[\-\-echo\-cys] [\-\-fail\-fast | \-\-best\-effort] [\-\-clean\-db | \-\-reset\-db] \-\-seed \fIFILE\fR [\-\-stm\-wise]
+.TP
+.B modular
+[\-\-echo\-cys] [\-\-fail\-fast | \-\-best\-effort] [\-\-clean\-db | \-\-reset\-db]
+\-\-seed\-grp \fIFILE\fR [\-\-stm\-wise | \-\-pkg\-wise \-\-pkg\-size \fIN\fR] [\-\-seed\-pre \fIFILE\fR] [\-\-seed\-post \fIFILE\fR]
+.TP
+.B db\-check
+.TP
+.B db\-clean
+.TP
+.B db\-reset
+.RE
+.SH DESCRIPTION
+.B Neopop
+executes Cypher workloads against a Neo4j 5 database. It wraps
+.BR cypher\-shell (1)
+to provide consistent commit models, execution control, and common initialization patterns.
+.PP
+Two graph seed kinds are supported:
+.IP \(bu 2
+.B Monolithic:
+a single Cypher file (DDL and/or DML) executed statement\-wise. Equivalent to feeding the file directly into
+.BR cypher\-shell .
+.IP \(bu 2
+.B Modular:
+a triple of optional pre/post schema files (DDL) and a mandatory pure DML file. Supports statement\-wise and package\-wise commit models.
+.SH GLOBAL OPTIONS
+.TP
+.BR \-u ", " \-\-user =\fIUSER\fR
+Database username.
+.TP
+.BR \-p ", " \-\-password =\fIPASS\fR
+Database password.
+.TP
+.BR \-a ", " \-\-address =\fIURL\fR
+Bolt URL of the server (e.g. \fBneo4j://localhost:7687\fR).
+.TP
+.BR \-d ", " \-\-database =\fIDB\fR
+Target database name.
+.PP
+\fBNote:\fR global options (\-u/\-p/\-a/\-d) must appear \fIbefore\fR the command.
+.SH EXECUTION CONTROL
+(Commands \fBmonolithic\fR and \fBmodular\fR only; mutually exclusive.)
+.TP
+.B \-\-fail\-fast
+Abort on first error (default if unspecified).
+.TP
+.B \-\-best\-effort
+Execute all statements, report errors at end.
+.SH DATABASE PREPARATION
+(Commands \fBmonolithic\fR and \fBmodular\fR only; mutually exclusive.)
+.TP
+.B \-\-clean\-db
+Remove all nodes, relationships, constraints, and indexes before seeding.
+.TP
+.B \-\-reset\-db
+Drop and recreate the target database before seeding. Requires access to the \fBsystem\fR database.
+.SH ECHOING CYPHER
+(Commands \fBmonolithic\fR and \fBmodular\fR only.)
+.TP
+.B \-\-echo\-cys
+Echo \fBcypher\-shell\fR output during seeding to the console (it is always logged to \fBneopop.log\fR). Useful for debugging or verifying Cypher execution.
+.SH MONOLITHIC COMMAND
+.TP
+.B \-\-seed \fIFILE\fR
+Input file containing DDL and/or DML statements. \fIFILE\fR may be \fB\-\fR for STDIN.
+.TP
+.B \-\-stm\-wise
+Statement\-wise commit model (default). Each statement runs in its own implicit transaction.
+.SH MODULAR COMMAND
+.TP
+.B \-\-seed\-grp \fIFILE\fR
+Pure DML seed file (mandatory). \fIFILE\fR may be \fB\-\fR for STDIN.
+.TP
+.B \-\-stm\-wise
+Statement\-wise commit model (default). Each statement runs in its own implicit transaction.
+.TP
+.B \-\-pkg\-wise
+Package\-wise commit model. Statements from \fB\-\-seed\-grp\fR are grouped into explicit transactions of size \fIN\fR.
+.TP
+.B \-\-pkg\-size \fIN\fR
+Number of DML statements per transaction for package\-wise mode. \fIN\fR \[ge] 2 (1 is not allowed).
+.TP
+.B \-\-seed\-pre \fIFILE\fR
+Executed once before \fB\-\-seed\-grp\fR in a single transaction. DDL only.
+.TP
+.B \-\-seed\-post \fIFILE\fR
+Executed once after \fB\-\-seed\-grp\fR in a single transaction. DDL only.
+.SH DATABASE COMMANDS
+.TP
+.B db\-check
+Verifies connectivity to the target database by running a trivial Cypher query (\fBRETURN 1\fR).
+.TP
+.B db\-clean
+Removes all data and schema objects from the target database by:
+.RS
+.IP \(bu 2
+Batch\-deleting all nodes and relationships
+.IP \(bu 2
+Dropping all constraints
+.IP \(bu 2
+Dropping all indexes
+.RE
+.TP
+.B db\-reset
+Drops and recreates the target database, then waits until it is online again. Requires access to the \fBsystem\fR database. \fBAll data will be permanently lost.\fR
+.SH EXAMPLES
+.TP
+Monolithic seed from file
+.nf
+neopop \-u neo4j \-p secret \-a neo4j://localhost:7687 \-d test \\
+  monolithic \-\-seed mixed.cypher
+.fi
+.TP
+Monolithic seed from stdin
+.nf
+cat mixed.cypher | neopop \-u neo4j \-p secret \-a ... \-d test \\
+  monolithic \-\-seed \-
+.fi
+.TP
+Modular seed (statement\-wise)
+.nf
+neopop \-u neo4j \-p secret \-a ... \-d test \\
+  modular \-\-seed\-grp graph.cypher \-\-stm\-wise
+.fi
+.TP
+Modular seed (package\-wise, 500 stmts per tx)
+.nf
+neopop \-u neo4j \-p secret \-a ... \-d test \\
+  modular \-\-seed\-grp graph.cypher \\
+          \-\-pkg\-wise \-\-pkg\-size 500
+.fi
+.TP
+Modular seed with schema setup/teardown
+.nf
+neopop \-u neo4j \-p secret \-a ... \-d test \\
+  modular \-\-seed\-pre pre.cypher \\
+          \-\-seed\-grp graph.cypher \\
+          \-\-seed\-post post.cypher \\
+          \-\-pkg\-wise \-\-pkg\-size 1000
+.fi
+.TP
+Reset database before running workload
+.nf
+neopop \-u neo4j \-p secret \-a ... \-d test db\-reset
+.fi
+.SH AUTHOR
+Written by nemron.
+.SH COPYRIGHT
+© 2025 nemron <https://github.com/normenmueller>
+.br
+GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007.
+.SH SEE ALSO
+.BR cypher\-shell (1)
+.br
+Neo4j Cypher Manual: https://neo4j.com/docs/cypher\-manual/current/
+.br
+Neo4j Operations Manual: https://neo4j.com/docs/operations\-manual/current/

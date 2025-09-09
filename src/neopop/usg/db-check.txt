@@ -1,0 +1,16 @@
+🌱 Help: db-check
+
+Usage:
+  db-check
+
+Description:
+  Test connectivity to a Neo4j database.
+  In other words: this command is equivalent to a simple "ping".
+
+Options:
+  -h, --help     Show this help text and exit
+
+Notes:
+  • Uses the provided global options (-u/-p/-a/-d)
+  • Exits with a non-zero code if the connection cannot be established
+

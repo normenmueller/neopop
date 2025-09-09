@@ -1,0 +1,19 @@
+🌱 Help: db-clean
+
+Usage:
+  db-clean
+
+Description:
+  Delete all graph data and drop all constraints and indexes
+  in the target database.
+
+Options:
+  -h, --help     Show this help text and exit
+
+Notes:
+  • Uses the provided global options (-u/-p/-a/-d)
+  • Executes in batches to avoid transaction timeouts
+  • Exits with a non-zero code if any step fails
+  • Label, relationship-type and property-key tokens remain registered.
+    To also clear these tokens, use 'db-reset'.
+

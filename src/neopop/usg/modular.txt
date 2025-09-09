@@ -1,0 +1,44 @@
+🌱 Help: modular
+
+Usage:
+  modular  [--echo-cys]
+           [--fail-fast | --best-effort]
+           [--clean-db | --reset-db]
+           [--seed-pre FILE]
+           --seed-grp FILE [--stm-wise | --pkg-wise --pkg-size N]
+           [--seed-post FILE]
+
+Global Options:
+  --echo-cys        Echoes cypher-shell output during seeding.
+
+Execution control (mutually exclusive):
+  --fail-fast       Abort on first error (default if unspecified)
+  --best-effort     Execute all, report errors at end
+
+Database preparation (mutually exclusive):
+  --clean-db        Remove all nodes, relationships, constraints,
+                    and indexes before seeding
+  --reset-db        Drop and recreate the target database before
+                    seeding (requires system access!)
+
+Commit model (mutually exclusive):
+  --stm-wise        Statement-wise commit model:
+                    each statement runs in its own implicit tx
+                    (default if omitted)
+  --pkg-wise        Package-wise commit model:
+                    statements from --seed-grp FILE are grouped into
+                    explicit tx blocks of size N
+    --pkg-size N    Number of DML statements per transaction
+                    (N ≥ 2; N=1 not allowed)
+
+Workload:
+  --seed-pre FILE   DDL-only Cypher executed once before --seed-grp
+  --seed-grp FILE   Pure DML seed file (path or "-" for STDIN)
+  --seed-post FILE  DDL-only Cypher executed once after --seed-grp
+
+Notes:
+  • With --pkg-wise, --seed-pre and --seed-post (if given) each run
+    in their own single transaction
+  • With --stm-wise, --seed-pre and --seed-post each run in their
+    own implicit transaction
+

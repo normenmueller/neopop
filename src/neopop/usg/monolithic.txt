@@ -1,0 +1,34 @@
+🌱 Help: monolithic
+
+Usage:
+  monolithic [--echo-cys]
+             [--fail-fast | --best-effort]
+             [--clean-db | --reset-db]
+             --seed FILE [--stm-wise]
+
+Global Options:
+  --echo-cys        Echoes cypher-shell output during seeding.
+
+Execution control (mutually exclusive):
+  --fail-fast       Abort on first error (default if unspecified)
+  --best-effort     Execute all, report errors at end
+
+Database preparation (mutually exclusive):
+  --clean-db        Remove all nodes, relationships, constraints,
+                    and indexes before seeding
+  --reset-db        Drop and recreate the target database before
+                    seeding (requires system access!)
+
+Commit model:
+  --stm-wise        Statement-wise commit model:
+                    each statement runs in its own implicit tx
+                    (default if omitted)
+
+Workload:
+  --seed FILE       Monolithic graph seed file (DDL + DML allowed).
+                    FILE may be a path or "-" for STDIN.
+
+Notes:
+  • Equivalent to feeding the file directly into cypher-shell,
+    but with execution model handling and error control
+
