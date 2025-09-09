@@ -16,8 +16,9 @@ SYNOPSIS
          modular    [--echo-cys]
                     [--fail-fast | --best-effort]
                     [--clean-db | --reset-db]
-                    --seed-dml FILE [--stm-wise | --pkg-wise --pkg-size N]
-                    [--seed-pre FILE] [--seed-post FILE]
+                    [--seed-pre FILE]
+                    --seed-grp FILE [--stm-wise | --pkg-wise --pkg-size N]
+                    [--seed-post FILE]
 
          db-check
          db-clean
@@ -84,7 +85,7 @@ MONOLITHIC COMMAND
               Each statement runs in its own implicit transaction.
 
 MODULAR COMMAND
-       --seed-dml FILE
+       --seed-grp FILE
               Pure DML seed file (mandatory).
               FILE may be "-" for STDIN.
 
@@ -94,18 +95,18 @@ MODULAR COMMAND
 
        --pkg-wise
               Package-wise commit model. Statements from
-              --seed-dml FILE are grouped into explicit
+              --seed-grp FILE are grouped into explicit
               transaction blocks of size N.
           --pkg-size N
               Number of DML statements per transaction.
               N ≥ 2 (N=1 not allowed).
 
        --seed-pre FILE
-              Executed once before --seed-dml in a single tx.
+              Executed once before --seed-grp in a single tx.
               FILE must contain only DDL statements.
 
        --seed-post FILE
-              Executed once after --seed-dml in a single tx.
+              Executed once after --seed-grp in a single tx.
               FILE must contain only DDL statements.
 
 DATABASE COMMANDS
@@ -137,19 +138,19 @@ EXAMPLES
 
        Modular seed (statement-wise):
               neopop -u neo4j -p secret -a ... -d test \
-                  modular --seed-dml graph.cypher --stm-wise
+                  modular --seed-grp graph.cypher --stm-wise
 
        Modular seed (package-wise, 500 stmts per tx):
               neopop -u neo4j -p secret -a ... -d test \
-                  modular --seed-dml graph.cypher \
+                  modular --seed-grp graph.cypher \
                           --pkg-wise --pkg-size 500
 
        Modular seed with schema setup/teardown:
               neopop -u neo4j -p secret -a ... -d test \
                   modular --seed-pre pre.cypher \
-                          --seed-dml graph.cypher \
-                          --seed-post post.cypher \
+                          --seed-grp graph.cypher \
                           --pkg-wise --pkg-size 1000
+                          --seed-post post.cypher \
 
        Reset database before running workload:
               neopop -u neo4j -p secret -a ... -d test \

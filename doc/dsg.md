@@ -7,7 +7,7 @@ version: 0.1
 
 ## Graph Seed
 
-A **graph seed** is a declarative specification of how a graph should be initialized (DDL/DML combination). There are two kinds graph seeds:
+A **graph seed** is a declarative specification of how a graph should be initialized (DDL/DML combination). There are two kinds of graph seeds:
 
 - modular
 - monolithic
@@ -51,7 +51,7 @@ In short, [Read-Write Query](https://neo4j.com/docs/cypher-cheat-sheet/5/all/#_r
 ##### Impure
 <a name="igd"></a>
 
-An **impure graph declaration** allows all of [pure graph declratation](#pgd) and:
+An **impure graph declaration** allows all DML statements of a [pure graph declratation](#pgd) and:
 
 - [Clauses](https://neo4j.com/docs/cypher-cheat-sheet/5/all/#_clauses)
 - [Subqueries](https://neo4j.com/docs/cypher-cheat-sheet/5/all/#_subqueries)
@@ -61,11 +61,24 @@ An **impure graph declaration** allows all of [pure graph declratation](#pgd) an
 
 ### Monolithic
 
-A **monolithic graph seed** is a modular impure graph seed flattened in one file.
+A **monolithic graph seed** is a modular impure graph seed flattened.
 
 ## Graph Population
 
 A **graph population** is an operational process of executing a graph seed into a live database, governed by an execution control (what happens on errors) and a commit model (how transactions are grouped), i.e., it specifies the transport behavior (what) and commit model (how).
+
+The CLI Client `neopop` mimics this process:
+
+```
+neopop modular
+  --best-effort # execution model
+  --stm-wise    # commit model
+  --seed-pre <pre>
+  --seed-grp <grp>
+  --seed-post <pst>
+```
+
+Read: "*Populate with best effort the modular graph seed `(<pre>, <grp>, <pst>)` statement wise!*"
 
 # CLI Client
 
