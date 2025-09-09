@@ -47,12 +47,12 @@ exec {CYPHER[0]}<&-  # stdout schließen
 wait
 ````
 
-# Advantages
+## Advantages
 
 - Significantly faster with many chunks (only one authentication and session setup).
 - No OS overhead per chunk.
 
-# Disadvantages
+## Disadvantages
 
 - Error handling becomes more complex:
   - If a chunk fails, you have to decide: Kill session or continue?
