@@ -49,7 +49,7 @@ man neopop
 
 ```bash
 neopop -u neo4j -p secret -a neo4j://localhost:7687 -d test \
-  monolithic --seed mixed.cypher
+  monolithic --seed mixed.cypher --echo-cys
 ```
 
 - `--seed FILE` Input file containing DDL and/or DML (`-` = STDIN)
@@ -63,7 +63,8 @@ neopop -u neo4j -p secret -a neo4j://localhost:7687 -d test \
   modular --seed-pre pre.cypher \
           --seed-grp graph.cypher \
           --seed-post post.cypher \
-          --pkg-wise --pkg-size 500
+          --pkg-wise --pkg-size 500 \
+          --echo-sys
 ```
 
 - `--seed-grp FILE` (mandatory) pure DML (`-` = STDIN)
@@ -93,7 +94,7 @@ neopop -u neo4j -p secret -a ... -d test \
   modular --seed-grp graph.cypher --stm-wise
 ```
 
-Reset database and run workload:
+Reset database:
 
 ```bash
 neopop -u neo4j -p secret -a ... -d test db-reset
