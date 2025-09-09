@@ -3,9 +3,9 @@ title: Design Decision Log
 version: 0.1
 ---
 
-# Readability validation
+# CLI argument readability validation
 
-Readability is validated by CLI parsing exclusively.
+Readability of passed CLI arguments is validated by CLI parsing exclusively.
 
 # Wrapping & Execution Guidelines
 
