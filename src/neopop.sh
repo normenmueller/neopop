@@ -176,7 +176,6 @@ mktmp() { # {{{2
       ;;
   esac
 }
-
 rmtmp() { # {{{2
   local d="${CHUNKDIR:-}"
   if [[ -n "$d" && -d "$d" && "$(basename "$d")" == neopop-chunks-* ]]; then
