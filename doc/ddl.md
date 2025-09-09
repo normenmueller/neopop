@@ -12,7 +12,7 @@ Readability of passed CLI arguments is validated by CLI parsing exclusively.
 | Scenario                                        | Command                          | Notes                                               |
 | ----------------------------------------------- | -------------------------------- | --------------------------------------------------- |
 | Execute a file *as-is* (statement-wise commits) | `csy file.cypher`                | Uses `cypher-shell -f` for efficiency.              |
-| Execute stdin *as-is* (statement-wise commits)  | `some_command | csy -`           | Reads from stdin, one transaction per statement.    |
+| Execute stdin *as-is* (statement-wise commits)  | `some_command \| csy -`          | Reads from stdin, one transaction per statement.    |
 | Execute a file wrapped in a single transaction  | `wrp file.cypher \| csy -`       | Wraps with `:begin/:commit` before piping to `csy`. |
 | Execute stdin wrapped in a single transaction   | `some_command \| wrp - \| csy -` | Wraps stdin data and pipes to `csy`.                |
 
